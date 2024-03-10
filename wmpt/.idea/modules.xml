@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/wmpt/common/common.iml" filepath="$PROJECT_DIR$/wmpt/common/common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wmpt/pojo/pojo.iml" filepath="$PROJECT_DIR$/wmpt/pojo/pojo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wmpt/server/server.iml" filepath="$PROJECT_DIR$/wmpt/server/server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wmpt/wmpt.iml" filepath="$PROJECT_DIR$/wmpt/wmpt.iml" />
+    </modules>
+  </component>
+</project>

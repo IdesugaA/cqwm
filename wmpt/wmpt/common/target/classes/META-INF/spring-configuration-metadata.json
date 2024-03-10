@@ -1,0 +1,119 @@
+{
+  "groups": [
+    {
+      "name": "own.jwt",
+      "type": "com.own.properties.JwtProperties",
+      "sourceType": "com.own.properties.JwtProperties"
+    },
+    {
+      "name": "sky.alioss",
+      "type": "com.own.properties.AliOssProperties",
+      "sourceType": "com.own.properties.AliOssProperties"
+    },
+    {
+      "name": "sky.wechat",
+      "type": "com.own.properties.WeChatProperties",
+      "sourceType": "com.own.properties.WeChatProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "own.jwt.admin-secret-key",
+      "type": "java.lang.String",
+      "description": "管理端员工生成jwt令牌相关配置",
+      "sourceType": "com.own.properties.JwtProperties"
+    },
+    {
+      "name": "own.jwt.admin-token-name",
+      "type": "java.lang.String",
+      "sourceType": "com.own.properties.JwtProperties"
+    },
+    {
+      "name": "own.jwt.admin-ttl",
+      "type": "java.lang.Long",
+      "sourceType": "com.own.properties.JwtProperties"
+    },
+    {
+      "name": "own.jwt.user-secret-key",
+      "type": "java.lang.String",
+      "description": "用户端微信用户生成jwt令牌相关配置",
+      "sourceType": "com.own.properties.JwtProperties"
+    },
+    {
+      "name": "own.jwt.user-token-name",
+      "type": "java.lang.String",
+      "sourceType": "com.own.properties.JwtProperties"
+    },
+    {
+      "name": "own.jwt.user-ttl",
+      "type": "java.lang.Long",
+      "sourceType": "com.own.properties.JwtProperties"
+    },
+    {
+      "name": "sky.alioss.access-key-id",
+      "type": "java.lang.String",
+      "sourceType": "com.own.properties.AliOssProperties"
+    },
+    {
+      "name": "sky.alioss.access-key-secret",
+      "type": "java.lang.String",
+      "sourceType": "com.own.properties.AliOssProperties"
+    },
+    {
+      "name": "sky.alioss.bucket-name",
+      "type": "java.lang.String",
+      "sourceType": "com.own.properties.AliOssProperties"
+    },
+    {
+      "name": "sky.alioss.endpoint",
+      "type": "java.lang.String",
+      "sourceType": "com.own.properties.AliOssProperties"
+    },
+    {
+      "name": "sky.wechat.api-v3-key",
+      "type": "java.lang.String",
+      "sourceType": "com.own.properties.WeChatProperties"
+    },
+    {
+      "name": "sky.wechat.appid",
+      "type": "java.lang.String",
+      "sourceType": "com.own.properties.WeChatProperties"
+    },
+    {
+      "name": "sky.wechat.mch-serial-no",
+      "type": "java.lang.String",
+      "sourceType": "com.own.properties.WeChatProperties"
+    },
+    {
+      "name": "sky.wechat.mchid",
+      "type": "java.lang.String",
+      "sourceType": "com.own.properties.WeChatProperties"
+    },
+    {
+      "name": "sky.wechat.notify-url",
+      "type": "java.lang.String",
+      "sourceType": "com.own.properties.WeChatProperties"
+    },
+    {
+      "name": "sky.wechat.private-key-file-path",
+      "type": "java.lang.String",
+      "sourceType": "com.own.properties.WeChatProperties"
+    },
+    {
+      "name": "sky.wechat.refund-notify-url",
+      "type": "java.lang.String",
+      "sourceType": "com.own.properties.WeChatProperties"
+    },
+    {
+      "name": "sky.wechat.secret",
+      "type": "java.lang.String",
+      "sourceType": "com.own.properties.WeChatProperties"
+    },
+    {
+      "name": "sky.wechat.we-chat-pay-cert-file-path",
+      "type": "java.lang.String",
+      "sourceType": "com.own.properties.WeChatProperties"
+    }
+  ],
+  "hints": []
+}

@@ -1,0 +1,31 @@
+server:
+  port: 1414
+
+
+spring:
+  main:
+    allow-circular-references: true
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:3306/cqwm?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+      username: root
+      password: 12345
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.own.entity
+  configuration:
+    map-underscore-to-camel-case: true
+
+own:
+  jwt:
+    admin-secret-key: itcast
+    admin-ttl: 7200000000
+    admin-token-name: token
+    user-secret-key: itheima
+    user-ttl: 7200000000
+    user-token-name: authentication
+  md5:
+    salt: abcd
+

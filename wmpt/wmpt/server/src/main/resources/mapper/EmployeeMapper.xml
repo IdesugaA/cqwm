@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.own.mapper.EmployeeMapper">
+    <!--修改员工数据
+    字符串类型：要判断空对象和空字符串
+    数字或日期类型：只需要判断空对象，不可以判空字符串，否则会报错
+    -->
+
+    <!--
+        示例
+        <update id="update" parameterType="com.sky.entity.Employee">
+        id是方法名，可任意取
+        也可以写参数resultType="com.szq.User"，代表返回值类型，如
+        <select id="select" resultType="com.szq.User">
+            select * from t_user where id=1
+        </select>
+
+        如果是update，insert这种修改数据的，可以写上接收的参数类型，如<update id="update" parameterType="com.sky.entity.Employee">
+
+        <if test="">
+
+        </if>
+        这种语句可以拿来进行条件判断，如
+        <if test="name!=null and name!=''">
+                name = #{name},
+        </if>
+        其中{name}是指Employee对象的name属性
+
+    -->
+
+    <select id="page" resultType="com.own.entity.Employee" parameterType="java.lang.String">
+        select * from employee
+        <where>
+            <if test="username!=null and username!=''">
+                username like concat('%',#{name},'%')
+            </if>
+        </where>
+        order by update_time desc
+    </select>
+
+    <update id="update" parameterType="com.own.entity.Employee">
+            update employee
+        <set>
+            <if test="name!=null and name != ''">
+                name = #{name},
+            </if>
+            <if test="username!=null and username!=''">
+                username = #{username},
+            </if>
+            <if test="phone!=null and phone!= ''">
+                phone = #{phone},
+            </if>
+            <if test="sex!=null and sex!=''">
+                sex = #{sex},
+            </if>
+            <if test="idNumber!=null and idNumber!=''">
+                idNumber = #{idNumber},
+            </if>
+            <if test="status!=null">
+                status=#{status},
+            </if>
+            <if test="updateTime!=null">
+                updateTime = #{updateTime},
+            </if>
+            <if test="updateUser!=null">
+                updateUser = #{updateUser},
+            </if>
+
+        </set>
+        where id = #{id}
+
+    </update>
+
+</mapper>
