@@ -6,6 +6,24 @@ public interface SetmealService {
     void saveWithDish(SetmealDTO setmealDTO);
 
 
+	//分页查询
+	PageResult pageQuery(SetmealPageQueryDTO setmealPageQueryDTO);
 
+
+	//条件查询
+	List<Setmeal> list(Setmeal setmeal);
+
+	//根据id查询菜品选项
+	List<DishItemVO> getDishItemById(Long id);
+
+	void deleteBatch(List<Long> ids);
+
+	//根据id查询套餐和关联的菜品数据
+	SetmealVO getByIdWithDish(Long id);
+
+	//修改套餐
+	void update(SetmealDTO setmealDTO);
+
+	void startOrStop(Integer status , Long id);
 
 }
