@@ -8,7 +8,7 @@ import org.springframework.cache.annotation.CacheEvict;
 
 import java.util.List;
 
-public class SetmealServiceImpl {
+public class SetmealServiceImpl implements SetmealService{
 
 	@Autowired
 	private SetmealMapper setmealMapper;

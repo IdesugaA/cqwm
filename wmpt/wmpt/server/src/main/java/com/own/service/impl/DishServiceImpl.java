@@ -27,7 +27,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class DishServiceImpl {
+public class DishServiceImpl implements DishService{
 
     @Resource
     private DishMapper dishMapper;
