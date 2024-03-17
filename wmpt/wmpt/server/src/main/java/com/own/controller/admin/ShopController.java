@@ -1,5 +1,13 @@
+package com.own.controller.admin;
 
 
+import com.own.result.Result;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin/shop")

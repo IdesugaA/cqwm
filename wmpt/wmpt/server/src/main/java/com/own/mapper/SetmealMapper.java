@@ -1,4 +1,18 @@
+package com.own.mapper;
 
+import com.github.pagehelper.Page;
+import com.own.annotation.AutoFill;
+import com.own.dto.SetmealPageQueryDTO;
+import com.own.entity.Setmeal;
+import com.own.enumeration.OperationType;
+import com.own.vo.DishItemVO;
+import com.own.vo.SetmealVO;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
+import java.util.Map;
 
 @Mapper
 
@@ -26,7 +40,7 @@ public interface SetmealMapper{
 
 	//根据id查询套餐
 	@Select("select * from setmeal where id = #{id}")
-	Setmeal geyById(Long id);
+	Setmeal getById(Long id);
 
 	//根据id删除套餐
 	@Delete("delete from setmeal where id = #{id}")

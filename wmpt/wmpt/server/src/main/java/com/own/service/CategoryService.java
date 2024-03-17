@@ -1,6 +1,12 @@
+package com.own.service;
 
 
+import com.own.dto.CategoryDTO;
+import com.own.dto.CategoryPageQueryDTO;
+import com.own.entity.Category;
+import com.own.result.PageResult;
 
+import java.util.List;
 
 public interface CategoryService{
 	//新增分类

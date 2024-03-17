@@ -1,11 +1,26 @@
+package com.own.service.impl;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.own.constant.MessageConstant;
+import com.own.dto.UserLoginDTO;
+import com.own.entity.User;
+import com.own.exception.BaseException;
+import com.own.mapper.UserMapper;
+import com.own.properties.WeChatProperties;
+import com.own.service.UserService;
+import com.own.utils.HttpClientUtil;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
-
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
 	private final UserMapper userMapper;
 	private final WeChatProperties weChatProperties;
@@ -21,7 +36,7 @@ public class UserServiceImpl implements UserService{
 		map.put("js_code",userLoginDTO.getCode());
 		map.put("grant_type","authorization_code");
 		String json = HttpClientUtil.doGet(url,map);
-		JSONObejct jsonObject = JSON.parseObject(json);
+		JSONObject jsonObject = JSON.parseObject(json);
 		String openid = (String) jsonObject.get("openid");
 		if(openid==null){
 			throw new BaseException(MessageConstant.LOGIN_FAILED);
@@ -32,7 +47,7 @@ public class UserServiceImpl implements UserService{
 		if(user == null){
 			user = new User();
 			user.setOpenid(openid);
-			user.setCreateTime(LocalDateTIme.now());
+			user.setCreateTime(LocalDateTime.now());
 			userMapper.insert(user);
 		}
 		return user;

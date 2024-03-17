@@ -10,10 +10,11 @@ import com.own.dto.DishPageQueryDTO;
 import com.own.entity.Category;
 import com.own.entity.Dish;
 import com.own.entity.DishFlavor;
+import com.own.entity.Setmeal;
 import com.own.exception.BaseException;
-import com.own.mapper.DishFlavorMapper;
-import com.own.mapper.DishMapper;
+import com.own.mapper.*;
 import com.own.result.PageResult;
+import com.own.service.DishService;
 import com.own.vo.DishVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -27,7 +28,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class DishServiceImpl implements DishService{
+public class DishServiceImpl implements DishService {
 
     @Resource
     private DishMapper dishMapper;
@@ -38,6 +39,12 @@ public class DishServiceImpl implements DishService{
     @Resource
     private RedisTemplate redisTemplate;
 
+    @Resource
+    private SetmealDishMapper setmealDishMapper;
+
+    @Resource
+    private CategoryMapper categoryMapper;
+
     @Override
     public void add(DishDTO dishDTO){
         Dish dish = new Dish();
@@ -47,7 +54,7 @@ public class DishServiceImpl implements DishService{
 
         List<DishFlavor> flavors = dishDTO.getFlavors();
         if(CollectionUtils.isEmpty(flavors)){
-            throws new BaseException("口味数据不能为空");
+            throw new BaseException("口味数据不能为空");
         }
 
         flavors.forEach(dishFlavor -> {
@@ -210,6 +217,7 @@ public class DishServiceImpl implements DishService{
     }
 
     //条件查询菜品和口味
+    @Override
     public List<DishVO> listWithFlavor(Dish dish){
         List<Dish> dishList = dishMapper.list(dish);
 

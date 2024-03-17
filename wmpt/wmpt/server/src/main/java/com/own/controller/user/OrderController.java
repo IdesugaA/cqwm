@@ -1,8 +1,24 @@
+package com.own.controller.user;
 
 
-
-
-
+import com.alibaba.fastjson.JSONObject;
+import com.own.dto.OrdersPageQueryDTO;
+import com.own.dto.OrdersPaymentDTO;
+import com.own.dto.OrdersSubmitDTO;
+import com.own.entity.Orders;
+import com.own.result.PageResult;
+import com.own.result.Result;
+import com.own.service.OrderService;
+import com.own.vo.OrderPaymentVO;
+import com.own.vo.OrderSubmitVO;
+import com.own.vo.OrderVO;
+import com.own.websocket.WebSocketServer;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user/order")
@@ -11,6 +27,7 @@
 @RequiredArgsConstructor
 public class OrderController{
 
+	@Autowired
 	private final OrderService orderService;
 
 	@ApiOperation("用户下单接口")
@@ -28,7 +45,7 @@ public class OrderController{
 
 	@PutMapping("/payment")
 	@ApiOperation("订单支付")
-	public Result<OrderPaymentVO> payment(@RequestBody OrdersPaymentDTO ordersPaymentDTO)throw Exception{
+	public Result<OrderPaymentVO> payment(@RequestBody OrdersPaymentDTO ordersPaymentDTO)throws Exception{
 	
 		log.info("订单支付：{}",ordersPaymentDTO);
 		OrderPaymentVO orderPaymentVO = orderService.payment(ordersPaymentDTO);
@@ -63,14 +80,14 @@ public class OrderController{
 		jsonObject.put("type",2);
 		jsonObject.put("orderId",id);
 		jsonObject.put("content","订单号："+orders.getNumber());
-		webSocketServer.sendToAllClient(jsonObject.toJsonString());
+		webSocketServer.sendToAllClient(jsonObject.toJSONString());
 		return Result.success();
 	}
 
 	@GetMapping("/orderDetail/{id}")
 	@ApiOperation("查询订单详情")
 	public Result<OrderVO> details(@PathVariable("id") Long id){
-		OrderVO orderVO = orderService.detail(id);
+		OrderVO orderVO = orderService.details(id);
 		return Result.success(orderVO);
 	}
 

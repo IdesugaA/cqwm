@@ -1,11 +1,27 @@
+package com.own.controller.user;
 
 
+import com.own.constant.JwtClaimsConstant;
+import com.own.dto.UserLoginDTO;
+import com.own.entity.User;
+import com.own.properties.JwtProperties;
+import com.own.result.Result;
+import com.own.service.UserService;
+import com.own.utils.JwtUtil;
+import com.own.vo.UserLoginVO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
 
-
-
-
-@RequestController
+@RestController
 @RequestMapping("/user/user")
 @Slf4j
 @Api(tags="用户管理相关接口")
@@ -29,13 +45,13 @@ public class UserController{
 		Map<String , Object> claims = new HashMap();
 		claims.put(JwtClaimsConstant.USER_ID,user.getId());
 		claims.put("openId",user.getOpenid());
-		String token = JwtUtil.createJWT(jwtProperties.getUserSecretKey(), jwtProperties.getUserTil(),claims);
+		String token = JwtUtil.createJWT(jwtProperties.getUserSecretKey(), jwtProperties.getUserTtl(),claims);
 
 		UserLoginVO userLoginVO = UserLoginVO.builder()
 			.id(user.getId())
 			.openid(user.getOpenid())
 			.token(token)
-			.build()
+			.build();
 		return Result.success(userLoginVO);
 
 

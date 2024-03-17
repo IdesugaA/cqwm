@@ -2,7 +2,9 @@ package com.own.service;
 
 import com.own.dto.DishDTO;
 import com.own.dto.DishPageQueryDTO;
+import com.own.entity.Dish;
 import com.own.result.PageResult;
+import com.own.vo.DishVO;
 
 import java.util.List;
 
@@ -19,4 +21,6 @@ public interface DishService {
     void update(DishDTO dishDTO);
 
     void startOrStop(Integer status , Long id);
+
+    List<DishVO> listWithFlavor(Dish dish);
 }

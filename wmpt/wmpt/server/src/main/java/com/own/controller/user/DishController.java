@@ -1,10 +1,24 @@
+package com.own.controller.user;
 
 
+import com.own.constant.StatusConstant;
+import com.own.entity.Dish;
+import com.own.result.Result;
+import com.own.service.DishService;
+import com.own.vo.DishVO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 
-
-
-@RequestController("userDishController")
+@RestController("userDishController")
 @RequestMapping("/user/dish")
 @Slf4j
 @Api(tags="C端-菜品浏览接口")
@@ -27,7 +41,7 @@ public class DishController{
 		List<DishVO> list = (List<DishVO>) redisTemplate.opsForValue().get(key);
 		if(CollectionUtils.isEmpty(list)){
 			//如果缓存没有数据，执行数据库查询
-			Dish dish = new dish();
+			Dish dish = new Dish();
 			dish.setCategoryId(categoryId);
 			dish.setStatus(StatusConstant.ENABLE);//查询起售中的菜品
 			list = dishService.listWithFlavor(dish);

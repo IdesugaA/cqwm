@@ -1,6 +1,15 @@
+package com.own.mapper;
 
 
+import com.own.dto.GoodsSalesDTO;
+import com.own.dto.OrdersPageQueryDTO;
+import com.own.entity.Orders;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface OrderMapper{
@@ -13,7 +22,7 @@ public interface OrderMapper{
 	void update(Orders orders);
 
 	@Select("select * from orders where status = #{status} and order_time <= #{compareTime}")
-	List<Orders> getByStatusAndOrdertimeLT(Integer status , LocalDateTime compareTime)
+	List<Orders> getByStatusAndOrdertimeLT(Integer status , LocalDateTime compareTime);
 
 	/**
 	*	status设置取消状态值

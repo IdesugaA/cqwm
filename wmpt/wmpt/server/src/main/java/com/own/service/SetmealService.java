@@ -1,5 +1,14 @@
 package com.own.service;
 
+import com.own.dto.SetmealDTO;
+import com.own.dto.SetmealPageQueryDTO;
+import com.own.entity.Setmeal;
+import com.own.result.PageResult;
+import com.own.vo.DishItemVO;
+import com.own.vo.SetmealVO;
+
+import java.util.List;
+
 public interface SetmealService {
 
     //新增套餐，同时需要保存套餐和菜品的关联关系

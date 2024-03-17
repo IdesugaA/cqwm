@@ -1,8 +1,10 @@
+package com.own.service;
+import com.own.vo.OrderReportVO;
+import com.own.vo.SalesTop10ReportVO;
+import com.own.vo.TurnoverReportVO;
+import com.own.vo.UserReportVO;
 
-
-
-
-
+import java.time.LocalDate;
 
 public interface ReportService{
 

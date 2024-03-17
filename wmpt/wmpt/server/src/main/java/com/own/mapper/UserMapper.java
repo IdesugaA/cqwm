@@ -1,5 +1,13 @@
+package com.own.mapper;
 
 
+import com.own.entity.User;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.Map;
 
 @Mapper
 public interface UserMapper{

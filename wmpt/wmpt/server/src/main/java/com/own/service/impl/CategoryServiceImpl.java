@@ -1,11 +1,30 @@
+package com.own.service.impl;
 
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.page.PageMethod;
+import com.own.constant.MessageConstant;
+import com.own.constant.StatusConstant;
+import com.own.dto.CategoryDTO;
+import com.own.dto.CategoryPageQueryDTO;
+import com.own.entity.Category;
+import com.own.exception.DeletionNotAllowedException;
+import com.own.mapper.CategoryMapper;
+import com.own.mapper.DishMapper;
+import com.own.mapper.SetmealMapper;
+import com.own.result.PageResult;
+import com.own.service.CategoryService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-
+import java.util.List;
 
 @Service
 @Slf4j
-public class CategoryServiceImpl implements CategoryService{
+public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
 	private CategoryMapper categoryMapper;
@@ -32,7 +51,7 @@ public class CategoryServiceImpl implements CategoryService{
 	//分页查询
 	
 	public PageResult pageQuery(CategoryPageQueryDTO categoryPageQueryDTO){
-		pageHelper.startPage(categoryPageQueryDTO.getPage(),categoryPageQueryDTO.getPageSize());
+		PageHelper.startPage(categoryPageQueryDTO.getPage(),categoryPageQueryDTO.getPageSize());
 		//下一条sql进行分页，自动加入limit关键字分页
 		Page<Category> page = categoryMapper.pageQuery(categoryPageQueryDTO);
 
@@ -65,7 +84,7 @@ public class CategoryServiceImpl implements CategoryService{
 			.id(id)
 			.status(status)
 			.build();
-		categoryMapper.update(categor);
+		categoryMapper.update(category);
 	}
 
 	//根据类型查询分类

@@ -1,9 +1,36 @@
+package com.own.service.impl;
 
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.own.dto.GoodsSalesDTO;
+import com.own.entity.Orders;
+import com.own.mapper.OrderMapper;
+import com.own.mapper.UserMapper;
+import com.own.service.ReportService;
+import com.own.service.WorkspaceService;
+import com.own.vo.*;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
-public class ReportServiceImpl implements ReportService{
+public class ReportServiceImpl implements ReportService {
 
 	@Resource
 	private OrderMapper orderMapper;
@@ -25,15 +52,15 @@ public class ReportServiceImpl implements ReportService{
 		//定义集合，收集每天营业额数据
 		ArrayList<Double> turnoverList = new ArrayList<>();
 		//遍历dateList日期列表，计算每一天营业额数据
-		dateList.forEach(data -> {
+		dateList.forEach(date -> {
 			//计算当天最小时间
-			LocalDateTime beginTime = LocalDate.of(date , LocalTime.MIN);
+			LocalDateTime beginTime = LocalDateTime.of(date,LocalTime.MIN);
 			//计算当天最大时间
-			LocalDateTime endTime = LocalDateTime.of(data , LocalTime.MAX); //年-月-日 23:59:59.9999999
+			LocalDateTime endTime = LocalDateTime.of(date , LocalTime.MAX); //年-月-日 23:59:59.9999999
 						
 			//调用orderMapper查询当天的已完成状态的营业额数据
 			Map map = new HashMap();
-			map.put("status",Orders.COMPLETED);
+			map.put("status", Orders.COMPLETED);
 			map.put("beginTime",beginTime);
 			map.put("endTime",endTime);
 			Double sum = orderMapper.sumByMap(map);
@@ -90,7 +117,7 @@ public class ReportServiceImpl implements ReportService{
 			totalUserList.add(total);
 		}
 		return UserReportVO.builder()
-			.dateList(StringUtils.join(dataList,","))
+			.dateList(StringUtils.join(dateList,","))
 			.newUserList(StringUtils.join(newUserList,","))
 			.totalUserList(StringUtils.join(totalUserList,","))
 			.build();
@@ -101,7 +128,7 @@ public class ReportServiceImpl implements ReportService{
 
 		//定义日期集合对象，收集每天日期
 		List<LocalDate> dateList = new ArrayList<>();
-		dataList.add(begin);
+		dateList.add(begin);
 		//通过循环，给begin开始日期不断+1,直到最后日期end结束，得到每一天的日期数据
 		while(!begin.equals(end)){
 			begin = begin.plusDays(1);
@@ -112,12 +139,12 @@ public class ReportServiceImpl implements ReportService{
 
 	//订单统计业务方法
 	@Override
-	public OrderReportVO orderStatistics(LocalDate begin , LocalDate end){
+	public OrderReportVO ordersStatistics(LocalDate begin , LocalDate end){
 
 		List<LocalDate> dateList = getDateList(begin,end);
 		//计算出每一天的有效订单数列表和订单总数列表
 		//定义有效订单数列表
-		List<Integer> validOrderCountList = new Array();
+		List<Integer> validOrderCountList = new ArrayList();
 		//定义订单数列表
 		List<Integer> orderCountList = new ArrayList();
 		//定义订单总数
@@ -129,7 +156,7 @@ public class ReportServiceImpl implements ReportService{
 		//遍历集合List<LocalDate>，计算每一天的订单数
 		for(LocalDate date : dateList){
 			LocalDateTime beginTime = LocalDateTime.of(date,LocalTime.MIN);//年-月-日 00:00
-			LocalDateTime endTime = LocalDateTime.of(LocalTime.MAX);//年-月-日 23:59:59.999999
+			LocalDateTime endTime = LocalDateTime.of(date,LocalTime.MAX);//年-月-日 23:59:59.999999
 			//获取当天的订单总数
 			Map map = new HashMap();
 			map.put("beginTime",beginTime);
@@ -173,10 +200,11 @@ public class ReportServiceImpl implements ReportService{
 
 		//根据List<GoodsSalesDTO>计算获取里面name收集到List<String>商品名字列表
 		List<String> nameList = goodsSalesDTOList.stream().map(GoodsSalesDTO::getName).collect(Collectors.toList());
+		List<Integer> numberList = goodsSalesDTOList.stream().map(GoodsSalesDTO::getNumber).collect(Collectors.toList());
 		return SalesTop10ReportVO.builder()
 			.nameList(StringUtils.join(nameList,","))
 			.numberList(StringUtils.join(numberList,","))
-			.build()
+			.build();
 	}
 
 	@Resource
@@ -192,8 +220,8 @@ public class ReportServiceImpl implements ReportService{
 	@Override
 	public void export2(){
 		try(//获取类路径下template/运营数据报表模板.xlsx文件输入流
-		    InputStream in = this.getClass().getClassLoader().getResourceAsSstream("template/data.xlsx");
-		    ExcelWriter excelWriter = EasyExcel.write(response.getOutputStream()).withTemplate(in).build();
+			InputStream in = this.getClass().getClassLoader().getResourceAsStream("template/data.xlsx");
+			ExcelWriter excelWriter = EasyExcel.write(response.getOutputStream()).withTemplate(in).build();
 
 		   ){
 			WriteSheet writeSheet = EasyExcel.writerSheet().build();
@@ -205,7 +233,7 @@ public class ReportServiceImpl implements ReportService{
 			LocalDateTime endTime = LocalDateTime.of(end,LocalTime.MAX);
 			//获取营业额概览数据
 			BusinessDataVO businessDataVO = workspaceService.getBusinessData(beginTime,endTime);
-			businessDataVO.setDataRange("时间："+begin+"至"+end);
+			businessDataVO.setDateRange("时间："+begin+"至"+end);
 			excelWriter.fill(businessDataVO,writeSheet);
 
 			List<LocalDate> dateList = getDateList(begin,end);
@@ -213,7 +241,7 @@ public class ReportServiceImpl implements ReportService{
 			int i = 7;
 			//定义集合收集每一天营业额数据
 			List<BusinessDataVO> businessDataVOList = new ArrayList<>();
-			for(LocalDate : dateList){
+			for(LocalDate date: dateList){
 				beginTime = LocalDateTime.of(date , LocalTime.MIN);
 				endTime = LocalDateTime.of(date,LocalTime.MAX);
 				//获取当天营业额数据

@@ -1,14 +1,31 @@
 package com.own.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.own.constant.MessageConstant;
+import com.own.constant.StatusConstant;
 import com.own.dto.SetmealDTO;
+import com.own.dto.SetmealPageQueryDTO;
+import com.own.entity.Dish;
 import com.own.entity.Setmeal;
 import com.own.entity.SetmealDish;
+import com.own.exception.DeletionNotAllowedException;
+import com.own.exception.SetmealEnableFailedException;
+import com.own.mapper.DishMapper;
+import com.own.mapper.SetmealDishMapper;
+import com.own.mapper.SetmealMapper;
+import com.own.result.PageResult;
+import com.own.service.SetmealService;
+import com.own.vo.DishItemVO;
+import com.own.vo.SetmealVO;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
-public class SetmealServiceImpl implements SetmealService{
+public class SetmealServiceImpl implements SetmealService {
 
 	@Autowired
 	private SetmealMapper setmealMapper;
@@ -49,9 +66,9 @@ public class SetmealServiceImpl implements SetmealService{
 			//传到service层也是DTO
 			int pageNum = setmealPageQueryDTO.getPage();
 			int pageSize = setmealPageQueryDTO.getPageSize();
-			PageHelper.starPage(pageNum,pageSize);
+			PageHelper.startPage(pageNum,pageSize);
 			Page<SetmealVO> page = setmealMapper.pageQuery(setmealPageQueryDTO);
-			return new PageResult(page.getTotal(),page.getResult);
+			return new PageResult(page.getTotal(),page.getResult());
 		}
     	
 		//条件查询
@@ -120,18 +137,18 @@ public class SetmealServiceImpl implements SetmealService{
 			//起售套餐时，判断套餐内是否有停售菜，有停售菜提示"套餐内包含未起售菜品，无法起售"
 			if(status == StatusConstant.ENABLE){
 				//select a.* from dish a left join setmeal_dish b on a.id = b.dish_id where b.setmeal_id = ?
-				List<Dish> dishList = dishMapper.getBySetmealId(id);
+				List<Dish> dishList = dishMapper.getBySetMealId(id);
 				if(dishList != null && dishList.size() > 0){
 					dishList.forEach(dish ->{
 						if(StatusConstant.DISABLE == dish.getStatus()){
-							throw new SetmealEnableFailedException(MessageConstant.SETMEAL.ENABLE_FAILED);
+							throw new SetmealEnableFailedException(MessageConstant.SETMEAL_ENABLE_FAILED);
 						}		
 					});
 				}
 			}
 			//如果是要停售，则无需判断其他
 			Setmeal setmeal = Setmeal.builder()
-					.id(id);
+					.id(id)
 					.status(status)
 					.build();
 			setmealMapper.update(setmeal);

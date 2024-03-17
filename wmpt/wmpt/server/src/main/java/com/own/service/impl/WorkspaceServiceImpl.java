@@ -1,11 +1,29 @@
+package com.own.service.impl;
 
 
+import com.own.constant.StatusConstant;
+import com.own.entity.Orders;
+import com.own.mapper.DishMapper;
+import com.own.mapper.OrderMapper;
+import com.own.mapper.SetmealMapper;
+import com.own.mapper.UserMapper;
+import com.own.service.WorkspaceService;
+import com.own.vo.BusinessDataVO;
+import com.own.vo.DishOverViewVO;
+import com.own.vo.OrderOverViewVO;
+import com.own.vo.SetmealOverViewVO;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @Slf4j
-public class WorkspaceServiceImpl implements WorkspaceService{
+public class WorkspaceServiceImpl implements WorkspaceService {
 
 	@Autowired
 	private OrderMapper orderMapper;
@@ -20,6 +38,7 @@ public class WorkspaceServiceImpl implements WorkspaceService{
 	private SetmealMapper setmealMapper;
 
 	//根据时间段统计营业数据
+	@Override
 	public BusinessDataVO getBusinessData(LocalDateTime begin , LocalDateTime end){
 
 		/**
@@ -40,7 +59,7 @@ public class WorkspaceServiceImpl implements WorkspaceService{
 
 		//查询总订单数
 		Integer totalOrderCount = orderMapper.countByMap(map);
-		map.put("status",Orders.COMPLETED);
+		map.put("status", Orders.COMPLETED);
 
 		//营业额
 		Double turnover = orderMapper.sumByMap(map);
@@ -48,6 +67,7 @@ public class WorkspaceServiceImpl implements WorkspaceService{
 		//有效订单数
 		Integer validOrderCount = orderMapper.countByMap(map);
 		Double unitPrice = 0.0;
+		Double orderCompletionRate = 0.0;
 		
 		if(totalOrderCount != 0 && validOrderCount != 0){
 
@@ -55,7 +75,7 @@ public class WorkspaceServiceImpl implements WorkspaceService{
 			orderCompletionRate = validOrderCount.doubleValue() / totalOrderCount;
 
 			//平均单客价
-			unitProce = turnover / validOrderCount;
+			unitPrice = turnover / validOrderCount;
 		}
 		
 		Integer newUsers = userMapper.countByMap(map);
@@ -70,8 +90,10 @@ public class WorkspaceServiceImpl implements WorkspaceService{
 
 	}
 
+
+	@Override
 	//查询订单管理数据
-	public OrderOverViewVO getOrderOverView(){
+	public OrderOverViewVO gerOrderOverView(){
 
 		Map map = new HashMap();
 		map.put("begin",LocalDateTime.now().with(LocalTime.MIN));
@@ -93,7 +115,7 @@ public class WorkspaceServiceImpl implements WorkspaceService{
 		Integer allOrders = orderMapper.countByMap(map);
 		return OrderOverViewVO.builder()
 			.waitingOrders(waitingOrders)
-			.deliverdOrders(deliverdOrders)
+			.deliveredOrders(deliverdOrders)
 			.completedOrders(completedOrders)
 			.cancelledOrders(cancelledOrders)
 			.allOrders(allOrders)
@@ -101,6 +123,7 @@ public class WorkspaceServiceImpl implements WorkspaceService{
 	}
 
 
+	@Override
 	//查询菜品总览
 	public DishOverViewVO getDishOverView(){
 
@@ -112,23 +135,27 @@ public class WorkspaceServiceImpl implements WorkspaceService{
 		return DishOverViewVO.builder()
 			.sold(sold)
 			.discontinued(discontinued)
-			.buildd();
+			.build();
 	}
 
 	//查询套餐总览
+	@Override
 	public SetmealOverViewVO getSetmealOverView(){
 		Map map = new HashMap();
-		map.put("status" , StatusConstant);
+		map.put("status" , StatusConstant.ENABLE);
 		Integer sold = setmealMapper.countByMap(map);
 		map.put("status" , StatusConstant.DISABLE);
 		Integer discontinued = setmealMapper.countByMap(map);
 		return SetmealOverViewVO.builder()
 			.sold(sold)
 			.discontinued(discontinued)
-			.build()
+			.build();
 
 
 	}
+
+
+
 
 
 
